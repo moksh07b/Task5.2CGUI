@@ -2,39 +2,41 @@ import tkinter as tk
 import time
 import RPi.GPIO as GPIO
 
+
+
 class App():
     def __init__(self):
         #Declaring the variables and setting out pinmodes the pins
         GPIO.setmode(GPIO.BOARD)
         
-        self.red_led_1 = 11
-        self.green_led = 15
-        self.red_led_2 = 13
+        self.red_led = 12
+        self.blue_led = 16
+        self.yellow_led = 18
         
-        GPIO.setup(self.red_led_1, GPIO.OUT)
-        GPIO.setup(self.green_led, GPIO.OUT)
-        GPIO.setup(self.red_led_2, GPIO.OUT)
-        
-        #Initially everything at the start is at 0 value
-        self.var1 = tk.DoubleVar()
-        self.var1.trace_add('write', lambda var_name, index, mode: self.change_light_intensity(1, self.var1))
-        self.pwm1 = GPIO.PWM(self.red_led_1, 1000)
-        self.pwm1.start(0)
-
-        self.var2 = tk.DoubleVar()
-        self.var2.trace_add('write', lambda var_name, index, mode: self.change_light_intensity(2, self.var2))
-        self.pwm2 = GPIO.PWM(self.red_led_2, 1000)
-        self.pwm2.start(0)
-
-        self.var3 = tk.DoubleVar()
-        self.var3.trace_add('write', lambda var_name, index, mode: self.change_light_intensity(3, self.var3))
-        self.pwm3 = GPIO.PWM(self.green_led, 1000)
-        self.pwm3.start(0)
+        GPIO.setup(self.red_led, GPIO.OUT)
+        GPIO.setup(self.blue_led, GPIO.OUT)
+        GPIO.setup(self.yellow_led, GPIO.OUT)
         
         # MAking the GUI for the user and placing it on the window.
         self.main_window = tk.Tk()
         self.main_window.geometry('400x400')
         self.main_window.title('Raspberry GUI')
+        
+        #Initially everything at the start is at 0 value
+        self.var1 = tk.DoubleVar()
+        self.var1.trace_add('write', lambda var_name, index, mode: self.change_light_intensity(1, self.var1))
+        self.pwm1 = GPIO.PWM(self.red_led, 1000)
+        self.pwm1.start(0)
+
+        self.var2 = tk.DoubleVar()
+        self.var2.trace_add('write', lambda var_name, index, mode: self.change_light_intensity(2, self.var2))
+        self.pwm2 = GPIO.PWM(self.yellow_led, 1000)
+        self.pwm2.start(0)
+
+        self.var3 = tk.DoubleVar()
+        self.var3.trace_add('write', lambda var_name, index, mode: self.change_light_intensity(3, self.var3))
+        self.pwm3 = GPIO.PWM(self.blue_led, 1000)
+        self.pwm3.start(0)     
       
         self.slider1 = self.get_slider(self.main_window, self.var1)
         self.slider1.place(x=100, y=40, width= 200)
@@ -65,7 +67,7 @@ class App():
         elif slider_val == 2:
             self.pwm2.ChangeDutyCycle(value)
         elif slider_val == 3:
-            self.pwm2.ChangeDutyCycle(value)        
+            self.pwm3.ChangeDutyCycle(value)        
         
     def get_slider(self, window, var):
         slider = tk.Scale(
